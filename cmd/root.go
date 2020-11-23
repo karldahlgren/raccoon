@@ -36,6 +36,7 @@ var rootCmd = &cobra.Command{
 	Short: "Raccoon is a Kafka-tool to search and find messages in Kafka topics",
 }
 
+// The execute method prints the logo and starts all commands
 func Execute() {
 	fmt.Println("____")
 	fmt.Println("|  _ \\ __ _  ___ ___ ___   ___  _ __")

@@ -29,6 +29,7 @@ import (
 	"os"
 )
 
+// Exit the program upon an error
 func ExitOnError(err error) {
 	if err != nil {
 		fmt.Println(err)

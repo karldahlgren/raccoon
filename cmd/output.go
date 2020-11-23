@@ -36,7 +36,7 @@ import (
 	"time"
 )
 
-func writeResultToFile(result kafka.Result, output string, tracker *progress.Tracker)  {
+func writeResultToFile(result kafka.Result, output string, tracker *progress.Tracker) {
 	tracker.Total = int64(result.Messages.Len())
 	file, err := os.Create(output)
 	if err != nil {
@@ -47,7 +47,7 @@ func writeResultToFile(result kafka.Result, output string, tracker *progress.Tra
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	writeHeader(*writer);
+	writeHeader(*writer)
 	for element := result.Messages.Front(); element != nil; element = element.Next() {
 		message := element.Value.(kafka.Message)
 		row := getData(message)
@@ -57,7 +57,7 @@ func writeResultToFile(result kafka.Result, output string, tracker *progress.Tra
 	tracker.MarkAsDone()
 }
 
-func writeHeader(writer csv.Writer)  {
+func writeHeader(writer csv.Writer) {
 	header := []string{"partition", "offset", "timestamp", "keu", "value"}
 	err := writer.Write(header)
 	if err != nil {
@@ -65,14 +65,14 @@ func writeHeader(writer csv.Writer)  {
 	}
 }
 
-func writeRow(writer csv.Writer, row []string)  {
+func writeRow(writer csv.Writer, row []string) {
 	err := writer.Write(row)
 	if err != nil {
 		utility.ExitOnError(err)
 	}
 }
 
-func printSummaryToPrompt(result kafka.Result)  {
+func printSummaryToPrompt(result kafka.Result) {
 	time.Sleep(100 * time.Millisecond)
 	fmt.Println()
 	fmt.Println("Matched messages: " + strconv.FormatInt(result.Count, 10))
@@ -80,7 +80,7 @@ func printSummaryToPrompt(result kafka.Result)  {
 	fmt.Println()
 }
 
-func printResultToPrompt(result kafka.Result)  {
+func printResultToPrompt(result kafka.Result) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Partition", "Offset", "Timestamp", "Key", "Value"})
 
@@ -92,7 +92,7 @@ func printResultToPrompt(result kafka.Result)  {
 	table.Render()
 }
 
-func getData(message kafka.Message) []string  {
+func getData(message kafka.Message) []string {
 	return []string{
 		strconv.FormatInt(int64(message.Partition), 10),
 		message.Offset,

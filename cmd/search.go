@@ -75,7 +75,7 @@ func init() {
 	searchCmd.PersistentFlags().StringVarP(&group, "group", "g", "", "Group name (Optional)")
 	searchCmd.PersistentFlags().StringVarP(&query, "query", "q", "", "Query (Required)")
 	searchCmd.PersistentFlags().StringVarP(&output, "output", "o", "", "Output file name (Optional)")
-	searchCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false,"Print output in terminal (Optional)")
+	searchCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Print output in terminal (Optional)")
 
 	searchCmd.MarkPersistentFlagRequired("broker")
 	searchCmd.MarkPersistentFlagRequired("topic")

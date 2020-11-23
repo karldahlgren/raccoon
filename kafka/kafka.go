@@ -35,15 +35,16 @@ import (
 	"time"
 )
 
+// Create a new Kafka consumer
 func CreateConsumer(topic string, group string, tracker *progress.Tracker) *kafka.Consumer {
 	if group == "" {
 		group = "raccoon-" + strconv.Itoa(rand.Int())
 	}
 	tracker.Increment(1)
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost",
-		"group.id":          group,
-		"auto.offset.reset": "earliest",
+		"bootstrap.servers":  "localhost",
+		"group.id":           group,
+		"auto.offset.reset":  "earliest",
 		"enable.auto.commit": "false",
 	})
 	if err != nil {
@@ -55,7 +56,8 @@ func CreateConsumer(topic string, group string, tracker *progress.Tracker) *kafk
 	return consumer
 }
 
-func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker)  {
+// Stop a Kafka consumer
+func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker) {
 	tracker.Increment(1)
 	err := consumer.Close()
 
@@ -65,7 +67,8 @@ func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker)  {
 	tracker.Increment(1)
 }
 
-func Consume(consumer *kafka.Consumer, tracker *progress.Tracker) Result  {
+// Consume messages from a Kafka consumer
+func Consume(consumer *kafka.Consumer, tracker *progress.Tracker) Result {
 	var maxMessages int64 = 1000000
 
 	searchQuery := "9999"
@@ -81,11 +84,11 @@ func Consume(consumer *kafka.Consumer, tracker *progress.Tracker) Result  {
 			if strings.Contains(value, searchQuery) {
 				count++
 				message := Message{
-					Key: string(msg.Key),
-					Value: value,
+					Key:       string(msg.Key),
+					Value:     value,
 					Timestamp: msg.Timestamp,
 					Partition: msg.TopicPartition.Partition,
-					Offset: msg.TopicPartition.Offset.String(),
+					Offset:    msg.TopicPartition.Offset.String(),
 				}
 
 				messages.PushFront(message)
@@ -97,7 +100,7 @@ func Consume(consumer *kafka.Consumer, tracker *progress.Tracker) Result  {
 	elapsedTime := stopTime.Sub(startTime)
 	return Result{
 		Messages: *messages,
-		Count: count,
+		Count:    count,
 		Duration: elapsedTime,
 	}
 }

@@ -30,6 +30,7 @@ import (
 	"time"
 )
 
+// Create new progress
 func CreateProgress() progress.Writer {
 	pw := progress.NewWriter()
 	pw.SetTrackerLength(25)
@@ -50,18 +51,21 @@ func CreateProgress() progress.Writer {
 	return pw
 }
 
-func CreateTracker(message string, total int64, writer progress.Writer) *progress.Tracker  {
+// Create new tracker for a progress
+func CreateTracker(message string, total int64, writer progress.Writer) *progress.Tracker {
 	tracker := progress.Tracker{Message: message, Total: total, Units: progress.UnitsDefault}
 	writer.AppendTracker(&tracker)
 	return &tracker
 }
 
-func InitiateProgress(writer progress.Writer)  {
+// Initiate progress
+func InitiateProgress(writer progress.Writer) {
 	go writer.Render()
 	time.Sleep(100 * time.Millisecond)
 }
 
-func FinishProgress(writer progress.Writer)  {
+// Finish progress
+func FinishProgress(writer progress.Writer) {
 	time.Sleep(time.Second)
 	if writer.LengthActive() == 0 {
 		writer.Stop()

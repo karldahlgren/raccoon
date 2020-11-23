@@ -41,6 +41,7 @@ var client = &http.Client{
 	},
 }
 
+// Check for new updates
 func CheckForUpdates() {
 	currentVersion := Version
 	rand.Seed(time.Now().UnixNano())
@@ -71,4 +72,3 @@ func CheckForUpdates() {
 		}
 	}
 }
-

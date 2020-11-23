@@ -26,10 +26,11 @@ package kafka
 
 import "time"
 
+// Extracted data from matched Kafka messages
 type Message struct {
-	Key string
-	Value string
+	Key       string
+	Value     string
 	Timestamp time.Time
 	Partition int32
-	Offset string
+	Offset    string
 }
