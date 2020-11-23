@@ -42,7 +42,9 @@ Coming soon
       -t, --topic string    Topic name (Required)
       -v, --verbose         Print output in terminal (Optional)
     
-    required flag(s) "broker", "group", "query", "topic" not set
+    required flag(s) "broker", "query", "topic" not set
+    
+A summary will always be printed in the terminal when the search command has been executed. The summary will show the matched message count and the search time. The full result can either be presented in the terminal by using the --verbose flag or be exported to a CSV file by using the --output flag. The result will include each the partitioned id, offset, timestamp, key and value.
 
 ## Example
 
