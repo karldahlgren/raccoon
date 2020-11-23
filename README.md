@@ -1,14 +1,14 @@
 # Raccoon: A CLI Kafka Search tool
 
-[![Build Status](https://github.com/karldahlgren/raccoon/workflows/Go/badge.svg)](https://github.com/karldahlgren/raccoon/actions?query=workflow%3AGo)
 [![Go Report Card](https://goreportcard.com/badge/github.com/karldahlgren/raccoon)](https://goreportcard.com/report/github.com/karldahlgren/raccoon)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/karldahlgren/raccoon/blob/master/LICENSE)
 
-Raccoon is a command line search tool for Apache Kafka. 
-The tool allows the users to search for particular messages in a Kafka topic. 
-The result could either be presented in the prompt or exported to a file.
+Raccoon is a command line search tool for Apache Kafka written in Go. 
+The tool allows users to search for particular messages in a Kafka topic by providing a search query. 
+The tool will check whether a message value contains the provided query. 
+Once finished, all matched Kafka messages could either be presented in the terminal or exported to a CSV file.
 
-<img src="https://github.com/karldahlgren/raccoon/blob/main/img/screenshot.gif" width="100%"/>
+<img src="https://github.com/karldahlgren/raccoon/blob/main/img/screenshot.gif" width="75%"/>
 
 Table Of Content
 ----
@@ -27,9 +27,9 @@ Coming soon
     | |_) / _` |/ __/ __/ _ \ / _ \| '_ \
     |  _ < (_| | (_| (_| (_) | (_) | | | |
     |_| \_\__,_|\___\___\___/ \___/|_| |_|
-    Raccoon: Kafka search tool
+    Raccoon: Kafka search tool v1.0.0
     
-    required flag(s) "broker", "group", "query", "topic" not set
+    required flag(s) "broker", "query", "topic" not set
     Usage:
       raccoon search [flags]
     
@@ -44,7 +44,7 @@ Coming soon
     
     required flag(s) "broker", "group", "query", "topic" not set
 
-##Example
+## Example
 
     raccoon search -b localhost:9092 -q MyQuery -t MyTopic -o result.csv
     
