@@ -37,6 +37,11 @@ import (
 )
 
 func writeResultToFile(result kafka.Result, output string, tracker *progress.Tracker) {
+	if result.Messages.Len() == 0 {
+		tracker.MarkAsDone()
+		return
+	}
+
 	tracker.Total = int64(result.Messages.Len())
 	file, err := os.Create(output)
 	if err != nil {
@@ -81,6 +86,10 @@ func printSummaryToPrompt(result kafka.Result) {
 }
 
 func printResultToPrompt(result kafka.Result) {
+	if result.Messages.Len() == 0 {
+		return
+	}
+
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Partition", "Offset", "Timestamp", "Key", "Value"})
 

@@ -5,7 +5,7 @@
 
 Raccoon is a command line search tool for Apache Kafka written in Go. 
 The tool allows users to search for particular messages in a Kafka topic by providing a search query. 
-The tool will check whether a message value contains the provided query. 
+The tool will check whether a message matches the provided query. 
 Once finished, all matched Kafka messages could either be presented in the terminal or exported to a CSV file.
 
 <img src="https://github.com/karldahlgren/raccoon/blob/main/img/screenshot.gif" width="75%"/>
@@ -27,22 +27,20 @@ Coming soon
     | |_) / _` |/ __/ __/ _ \ / _ \| '_ \
     |  _ < (_| | (_| (_| (_) | (_) | | | |
     |_| \_\__,_|\___\___\___/ \___/|_| |_|
-    Raccoon: Kafka search tool v1.0.0
+    Raccoon: Kafka search tool (v1.0.0)
     
-    required flag(s) "broker", "query", "topic" not set
     Usage:
       raccoon search [flags]
     
     Flags:
-      -b, --broker string   Broker address (Required)
-      -g, --group string    Group name (Optional)
-      -h, --help            help for search
-      -o, --output string   Output file name (Optional)
-      -q, --query string    Query (Required)
-      -t, --topic string    Topic name (Required)
-      -v, --verbose         Print output in terminal (Optional)
-    
-    required flag(s) "broker", "query", "topic" not set
+      -b, --broker string        Broker address (Required)
+      -g, --group string         Group name (Optional)
+      -h, --help                 help for search
+      -k, --key-query string     Key query (Optional)
+      -o, --output string        Output file name (Optional)
+      -t, --topic string         Topic name (Required)
+      -q, --value-query string   Value query (Optional)
+      -v, --verbose              Print output in terminal (Optional)
     
 A summary will always be printed in the terminal when the search command has been executed. The summary will show the matched message count and the search time. The full result can either be presented in the terminal by using the --verbose flag or be exported to a CSV file by using the --output flag. The result will include each the partitioned id, offset, timestamp, key and value.
 

@@ -68,10 +68,8 @@ func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker) {
 }
 
 // Consume messages from a Kafka consumer
-func Consume(consumer *kafka.Consumer, tracker *progress.Tracker) Result {
+func Consume(consumer *kafka.Consumer, keyQuery string, valueQuery string, tracker *progress.Tracker) Result {
 	var maxMessages int64 = 1000000
-
-	searchQuery := "9999"
 	messages := list.New()
 	var count int64 = 0
 	var index int64 = 0
@@ -80,8 +78,10 @@ func Consume(consumer *kafka.Consumer, tracker *progress.Tracker) Result {
 		msg, err := consumer.ReadMessage(-1)
 
 		if err == nil {
+			key := strings.ToLower(string(msg.Key))
 			value := strings.ToLower(string(msg.Value))
-			if strings.Contains(value, searchQuery) {
+			if (keyQuery != "" && strings.Contains(key, keyQuery)) ||
+				(valueQuery != "" && strings.Contains(value, valueQuery)) {
 				count++
 				message := Message{
 					Key:       string(msg.Key),
