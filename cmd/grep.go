@@ -30,23 +30,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var broker, group, topic, valueQuery, keyQuery, output string
-var limit int64
-var verbose bool
-
-var searchCmd = &cobra.Command{
-	Use:   "search",
-	Short: "Search through a Kafka topics that matches",
-	Long:  `Search through a Kafka topics that matches`,
+var grepCmd = &cobra.Command{
+	Use:   "grep",
+	Short: "Search through a Kafka topics that and grep matches",
+	Long:  `Search through a Kafka topics that and grep matches`,
 	Run: func(cmd *cobra.Command, args []string) {
+		group := getStringFlag(cmd,"group")
+		topic := getStringFlag(cmd,"topic")
+		keyQuery := getStringFlag(cmd,"key-query")
+		valueQuery := getStringFlag(cmd,"value-query")
+		output := getStringFlag(cmd,"output")
+		limit := getInt64Flag(cmd, "limit")
+		verbose := getBoolFlag(cmd, "verbose")
+		
 		// Create progress and trackers
 		writer := CreateProgress()
-		createConsumerTracker := CreateTracker("Establishing connection to Kafka   # 1", 3, writer)
-		consumeTracker := CreateTracker("Reading messages                   # 2", limit, writer)
-		stopConsumerTracker := CreateTracker("Disconnecting from Kafka           # 3", 2, writer)
+		createConsumerTracker := CreateTracker("Connecting to Kafka              # 1", 3, writer)
+		consumeTracker := CreateTracker("Reading messages                 # 2", limit, writer)
+		stopConsumerTracker := CreateTracker("Disconnecting from Kafka         # 3", 2, writer)
 		var writeToFileTracker *progress.Tracker = nil
 		if output != "" {
-			writeToFileTracker = CreateTracker("Writing to file                    # 4", 1000000, writer)
+			writeToFileTracker = CreateTracker("Writing to file                  # 4", 1000000, writer)
 		}
 
 		InitiateProgress(writer)
@@ -71,16 +75,16 @@ var searchCmd = &cobra.Command{
 }
 
 func init() {
-	searchCmd.PersistentFlags().StringVarP(&broker, "broker", "b", "", "Broker address (Required)")
-	searchCmd.PersistentFlags().StringVarP(&topic, "topic", "t", "", "Topic name (Required)")
-	searchCmd.PersistentFlags().StringVarP(&group, "group", "g", "", "Group name (Optional)")
-	searchCmd.PersistentFlags().StringVarP(&valueQuery, "value-query", "q", "", "Value query (Optional)")
-	searchCmd.PersistentFlags().StringVarP(&keyQuery, "key-query", "k", "", "Key query (Optional)")
-	searchCmd.PersistentFlags().StringVarP(&output, "output", "o", "", "Output file name (Optional)")
-	searchCmd.PersistentFlags().Int64VarP(&limit, "limit", "l", 1000, "Limit message consumption per partition (Optional)")
-	searchCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Print output in terminal (Optional)")
+	grepCmd.Flags().StringP("broker", "b", "", "Broker address (Required)")
+	grepCmd.Flags().StringP("topic", "t", "", "Topic name (Required)")
+	grepCmd.Flags().StringP("group", "g", "", "Group name (Optional)")
+	grepCmd.Flags().StringP( "value-query", "q", "", "Value query (Optional)")
+	grepCmd.Flags().StringP( "key-query", "k", "", "Key query (Optional)")
+	grepCmd.Flags().StringP("output", "o", "", "Output file name (Optional)")
+	grepCmd.Flags().Int64P("limit", "l", 1000, "Limit message consumption per partition (Optional)")
+	grepCmd.Flags().BoolP("verbose", "v", false, "Print output in terminal (Optional)")
 
-	searchCmd.MarkPersistentFlagRequired("broker")
-	searchCmd.MarkPersistentFlagRequired("topic")
-	rootCmd.AddCommand(searchCmd)
+	grepCmd.MarkFlagRequired("broker")
+	grepCmd.MarkFlagRequired("topic")
+	rootCmd.AddCommand(grepCmd)
 }
