@@ -48,6 +48,7 @@ func CreateConsumer(topic string, group string, tracker *progress.Tracker) *kafk
 		"enable.auto.commit": "false",
 	})
 	if err != nil {
+		tracker.MarkAsDone()
 		utility.ExitOnError(err)
 	}
 	tracker.Increment(1)
@@ -62,19 +63,19 @@ func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker) {
 	err := consumer.Close()
 
 	if err != nil {
+		tracker.MarkAsDone()
 		utility.ExitOnError(err)
 	}
 	tracker.Increment(1)
 }
 
 // Consume messages from a Kafka consumer
-func Consume(consumer *kafka.Consumer, keyQuery string, valueQuery string, tracker *progress.Tracker) Result {
-	var maxMessages int64 = 1000000
+func Consume(consumer *kafka.Consumer, keyQuery string, valueQuery string, limit int64, tracker *progress.Tracker) Result {
 	messages := list.New()
 	var count int64 = 0
 	var index int64 = 0
 	startTime := time.Now()
-	for ; index < maxMessages; index++ {
+	for ; index < limit; index++ {
 		msg, err := consumer.ReadMessage(-1)
 
 		if err == nil {
@@ -98,6 +99,7 @@ func Consume(consumer *kafka.Consumer, keyQuery string, valueQuery string, track
 	}
 	stopTime := time.Now()
 	elapsedTime := stopTime.Sub(startTime)
+	tracker.MarkAsDone()
 	return Result{
 		Messages: *messages,
 		Count:    count,

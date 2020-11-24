@@ -45,6 +45,7 @@ func writeResultToFile(result kafka.Result, output string, tracker *progress.Tra
 	tracker.Total = int64(result.Messages.Len())
 	file, err := os.Create(output)
 	if err != nil {
+		tracker.MarkAsDone()
 		utility.ExitOnError(err)
 	}
 	defer file.Close()

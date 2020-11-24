@@ -31,6 +31,7 @@ import (
 )
 
 var broker, group, topic, valueQuery, keyQuery, output string
+var limit int64
 var verbose bool
 
 var searchCmd = &cobra.Command{
@@ -41,7 +42,7 @@ var searchCmd = &cobra.Command{
 		// Create progress and trackers
 		writer := CreateProgress()
 		createConsumerTracker := CreateTracker("Establishing connection to Kafka   # 1", 3, writer)
-		consumeTracker := CreateTracker("Reading messages                   # 2", 1000000, writer)
+		consumeTracker := CreateTracker("Reading messages                   # 2", limit, writer)
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka           # 3", 2, writer)
 		var writeToFileTracker *progress.Tracker = nil
 		if output != "" {
@@ -52,7 +53,7 @@ var searchCmd = &cobra.Command{
 
 		// Create Kafka consumer
 		consumer := kafka.CreateConsumer(topic, group, createConsumerTracker)
-		result := kafka.Consume(consumer, keyQuery, valueQuery, consumeTracker)
+		result := kafka.Consume(consumer, keyQuery, valueQuery, limit, consumeTracker)
 		kafka.StopConsumer(consumer, stopConsumerTracker)
 
 		if output != "" {
@@ -76,6 +77,7 @@ func init() {
 	searchCmd.PersistentFlags().StringVarP(&valueQuery, "value-query", "q", "", "Value query (Optional)")
 	searchCmd.PersistentFlags().StringVarP(&keyQuery, "key-query", "k", "", "Key query (Optional)")
 	searchCmd.PersistentFlags().StringVarP(&output, "output", "o", "", "Output file name (Optional)")
+	searchCmd.PersistentFlags().Int64VarP(&limit, "limit", "l", 1000, "Limit message consumption per partition (Optional)")
 	searchCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Print output in terminal (Optional)")
 
 	searchCmd.MarkPersistentFlagRequired("broker")

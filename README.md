@@ -8,7 +8,7 @@ The tool allows users to search for particular messages in a Kafka topic by prov
 The tool will check whether a message matches the provided query. 
 Once finished, all matched Kafka messages could either be presented in the terminal or exported to a CSV file.
 
-<img src="https://github.com/karldahlgren/raccoon/blob/main/img/screenshot.gif" width="75%"/>
+<img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/img/screenshot.gif" width="90%"/>
 
 Table Of Content
 ----
@@ -37,11 +37,12 @@ Coming soon
       -g, --group string         Group name (Optional)
       -h, --help                 help for search
       -k, --key-query string     Key query (Optional)
+      -l, --limit int            Limit message consumption per partition (Optional) (default 1000)
       -o, --output string        Output file name (Optional)
       -t, --topic string         Topic name (Required)
       -q, --value-query string   Value query (Optional)
       -v, --verbose              Print output in terminal (Optional)
-    
+
 A summary will always be printed in the terminal when the search command has been executed. The summary will show the matched message count and the search time. The full result can either be presented in the terminal by using the --verbose flag or be exported to a CSV file by using the --output flag. The result will include each the partitioned id, offset, timestamp, key and value.
 
 ## Example
