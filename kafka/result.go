@@ -31,7 +31,8 @@ import (
 
 // The result from the Kafka search action
 type Result struct {
-	Count    int64
+	MatchedMessages    int64
+	ReadMessages    int64
 	Duration time.Duration
 	Messages list.List
 }

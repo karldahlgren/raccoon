@@ -79,10 +79,15 @@ func writeRow(writer csv.Writer, row []string) {
 }
 
 func printSummaryToPrompt(result kafka.Result) {
+	searchTime := result.Duration.Round(time.Second).Seconds()
+	averagePerMessage := searchTime / float64(result.ReadMessages)
 	time.Sleep(100 * time.Millisecond)
 	fmt.Println()
-	fmt.Println("Matched messages: " + strconv.FormatInt(result.Count, 10))
-	fmt.Println("Search time: " + result.Duration.Round(time.Second).String())
+	fmt.Println("Summary:")
+	fmt.Println("  Read messages.......................:  " + strconv.FormatInt(result.ReadMessages, 10))
+	fmt.Println("  Matched messages....................:  " + strconv.FormatInt(result.MatchedMessages, 10))
+	fmt.Println("  Search time.........................:  " + fmt.Sprintf("%f", searchTime) + "s")
+	fmt.Println("  Messages/s..........................:  " + fmt.Sprintf("%f", averagePerMessage))
 	fmt.Println()
 }
 

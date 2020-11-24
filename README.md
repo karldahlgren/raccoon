@@ -49,13 +49,16 @@ A summary will always be printed in the terminal when the search command has bee
 
     raccoon search -b localhost:9092 -q MyQuery -t MyTopic -o result.csv
     
-    Establishing connection to Kafka   # 1   ... done! [3 in 115ms]
-    Reading message                    # 2   ... done! [1.00M in 2.871s]
-    Disconnecting from Kafka           # 3   ... done! [2 in 2.876s]
-    Writing to file                    # 4   ... done! [280 in 2.878s]
+    Establishing connection to Kafka   # 1   ... done! [3 in 109ms]
+    Reading messages                   # 2   ... done! [1.00M in 2.89s]
+    Disconnecting from Kafka           # 3   ... done! [2 in 2.893s]
+    Writing to file                    # 4   ... done! [280 in 2.894s]
     
-    Matched messages: 280
-    Search time: 3s
+    Summary:
+      Read messages.......................:  1000000
+      Matched messages....................:  280
+      Search time.........................:  3.000000s
+      Messages/s..........................:  0.000003
 
 ## License
 
