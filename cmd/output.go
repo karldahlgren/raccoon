@@ -55,7 +55,7 @@ func writeResultToFile(result kafka.Result, output string, tracker *progress.Tra
 
 	writeHeader(*writer)
 	for element := result.Messages.Front(); element != nil; element = element.Next() {
-		message := element.Value.(kafka.Message)
+		message := element.Value.(*kafka.Message)
 		row := getData(message)
 		writeRow(*writer, row)
 		tracker.Increment(1)
@@ -100,14 +100,14 @@ func printResultToPrompt(result kafka.Result) {
 	table.SetHeader([]string{"Partition", "Offset", "Timestamp", "Key", "Value"})
 
 	for element := result.Messages.Front(); element != nil; element = element.Next() {
-		message := element.Value.(kafka.Message)
+		message := element.Value.(*kafka.Message)
 		row := getData(message)
 		table.Append(row)
 	}
 	table.Render()
 }
 
-func getData(message kafka.Message) []string {
+func getData(message *kafka.Message) []string {
 	return []string{
 		strconv.FormatInt(int64(message.Partition), 10),
 		message.Offset,

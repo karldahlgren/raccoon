@@ -25,14 +25,15 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/karldahlgren/raccoon/kafka"
 	"github.com/spf13/cobra"
 )
 
-var grepCmd = &cobra.Command{
-	Use:   "grep",
-	Short: "Search through a Kafka topics that and grep matches",
-	Long:  `Search through a Kafka topics that and grep matches`,
+var tailCmd = &cobra.Command{
+	Use:   "tail",
+	Short: "Tail Kafka topics that and get matches",
+	Long:  `Tail a Kafka topic and retrieve all matches`,
 	Run: func(cmd *cobra.Command, args []string) {
 		broker := getStringFlag(cmd,"broker")
 		group := getStringFlag(cmd,"group")
@@ -42,17 +43,20 @@ var grepCmd = &cobra.Command{
 		output := getStringFlag(cmd,"output")
 		limit := getInt64Flag(cmd, "limit")
 		verbose := getBoolFlag(cmd, "verbose")
+
+		fmt.Println("Press enter to stop reading messages\n")
 		
 		// Create progress and trackers
 		writer := CreateProgress()
+
 		InitiateProgress(writer)
 
 		// Create Kafka consumer
 		createConsumerTracker := CreateTracker("Connecting to Kafka", 2, writer)
-		consumer := kafka.CreateEarliestConsumer(broker, topic, group, createConsumerTracker)
+		consumer := kafka.CreateLatestConsumer(broker, topic, group, createConsumerTracker)
 
 		consumeTracker := CreateTracker("Reading messages (0 matches)", limit, writer)
-		result := kafka.Consume(consumer, keyQuery, valueQuery, limit, consumeTracker)
+		result := kafka.Tail(consumer, keyQuery, valueQuery, limit, consumeTracker)
 
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka", 1, writer)
 		kafka.StopConsumer(consumer, stopConsumerTracker)
@@ -73,16 +77,16 @@ var grepCmd = &cobra.Command{
 }
 
 func init() {
-	grepCmd.Flags().StringP("broker", "b", "", "Broker address (Required)")
-	grepCmd.Flags().StringP("topic", "t", "", "Topic name (Required)")
-	grepCmd.Flags().StringP("group", "g", "", "Group name (Optional)")
-	grepCmd.Flags().StringP( "value-query", "q", "", "Value query (Optional)")
-	grepCmd.Flags().StringP( "key-query", "k", "", "Key query (Optional)")
-	grepCmd.Flags().StringP("output", "o", "", "Output file name (Optional)")
-	grepCmd.Flags().Int64P("limit", "l", 1000, "Limit message consumption per partition (Optional)")
-	grepCmd.Flags().BoolP("verbose", "v", false, "Print output in terminal (Optional)")
+	tailCmd.Flags().StringP("broker", "b", "", "Broker address (Required)")
+	tailCmd.Flags().StringP("topic", "t", "", "Topic name (Required)")
+	tailCmd.Flags().StringP("group", "g", "", "Group name (Optional)")
+	tailCmd.Flags().StringP( "value-query", "q", "", "Value query (Optional)")
+	tailCmd.Flags().StringP( "key-query", "k", "", "Key query (Optional)")
+	tailCmd.Flags().StringP("output", "o", "", "Output file name (Optional)")
+	tailCmd.Flags().Int64P("limit", "l", -1, "Limit message consumption per partition. -1 is no limit (Optional)")
+	tailCmd.Flags().BoolP("verbose", "v", false, "Print output in terminal (Optional)")
 
-	grepCmd.MarkFlagRequired("broker")
-	grepCmd.MarkFlagRequired("topic")
-	rootCmd.AddCommand(grepCmd)
+	tailCmd.MarkFlagRequired("broker")
+	tailCmd.MarkFlagRequired("topic")
+	rootCmd.AddCommand(tailCmd)
 }

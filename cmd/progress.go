@@ -55,6 +55,7 @@ func CreateProgress() progress.Writer {
 func CreateTracker(message string, total int64, writer progress.Writer) *progress.Tracker {
 	tracker := progress.Tracker{Message: message, Total: total, Units: progress.UnitsDefault}
 	writer.AppendTracker(&tracker)
+	time.Sleep(100 * time.Millisecond)
 	return &tracker
 }
 

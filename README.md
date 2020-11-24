@@ -27,38 +27,41 @@ Coming soon
     | |_) / _` |/ __/ __/ _ \ / _ \| '_ \
     |  _ < (_| | (_| (_| (_) | (_) | | | |
     |_| \_\__,_|\___\___\___/ \___/|_| |_|
-    Raccoon: Kafka search tool (v1.0.0)
+    Raccoon: Kafka search tool (dev-build)
     
     Usage:
-      raccoon search [flags]
+      raccoon grep [flags]
     
     Flags:
       -b, --broker string        Broker address (Required)
       -g, --group string         Group name (Optional)
-      -h, --help                 help for search
+      -h, --help                 help for grep
       -k, --key-query string     Key query (Optional)
       -l, --limit int            Limit message consumption per partition (Optional) (default 1000)
       -o, --output string        Output file name (Optional)
       -t, --topic string         Topic name (Required)
       -q, --value-query string   Value query (Optional)
       -v, --verbose              Print output in terminal (Optional)
+    
+    required flag(s) "broker", "topic" not set
 
-A summary will always be printed in the terminal when the search command has been executed. The summary will show the matched message count and the search time. The full result can either be presented in the terminal by using the --verbose flag or be exported to a CSV file by using the --output flag. The result will include each the partitioned id, offset, timestamp, key and value.
+A summary will always be printed in the terminal when the grep command has been executed. The summary will show the matched message count, and the search time. The full result can either be presented in the terminal by using the --verbose flag or be exported to a CSV file by using the --output flag. The result will include each the partitioned id, offset, timestamp, key and value.
 
 ## Example
 
-    raccoon search -b localhost:9092 -q MyQuery -t MyTopic -o result.csv
+    raccoon grep -b localhost:9092 -q MyQuery -t MyTopic -o result.csv
     
-    Establishing connection to Kafka   # 1   ... done! [3 in 109ms]
-    Reading messages                   # 2   ... done! [1.00M in 2.89s]
-    Disconnecting from Kafka           # 3   ... done! [2 in 2.893s]
-    Writing to file                    # 4   ... done! [280 in 2.894s]
+    Connecting to Kafka                      ... done! [2 in 105ms]
+    Reading messages (280 matches)           ... done! [1.00M in 3.003s]
+    Disconnecting from Kafka                 ... done! [1 in 100ms]
+    Writing to file                          ... done! [280 in 104ms]
     
     Summary:
       Read messages.......................:  1000000
       Matched messages....................:  280
       Search time.........................:  3.000000s
       Messages/s..........................:  0.000003
+
 
 ## License
 
