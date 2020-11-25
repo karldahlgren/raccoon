@@ -4,8 +4,8 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/karldahlgren/raccoon/blob/master/LICENSE)
 
 Raccoon is a command line search tool for Apache Kafka written in Go. 
-The tool allows users to search for particular messages in a Kafka topic by providing a search query. 
-The tool will check whether a message matches the provided query. 
+The tool enables users to search and grep particular messages in a Kafka topic by providing a search query. 
+Additionally, the tool also allows the user to tail a Kafka topic and filter messages based on a provided search query.
 Once finished, all matched Kafka messages could either be presented in the terminal or exported to a CSV file.
 
 <img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/img/screenshot.gif" width="90%"/>
@@ -13,22 +13,29 @@ Once finished, all matched Kafka messages could either be presented in the termi
 Table Of Content
 ----
 
-- [Install](#install)
-- [How to use](#how-to-use)
+- [Installation](#installation)
+- [Features](#features)
+- [Running Raccoon](#running-raccoon)
+    * [Grep](#grep)
+    * [Tail](#tail)
 - [Example](#example)
 - [License](#license)
 
-## Install
+## Installation
 Coming soon
 
-## How to use
-    ____
-    |  _ \ __ _  ___ ___ ___   ___  _ __
-    | |_) / _` |/ __/ __/ _ \ / _ \| '_ \
-    |  _ < (_| | (_| (_| (_) | (_) | | | |
-    |_| \_\__,_|\___\___\___/ \___/|_| |_|
-    Raccoon: Kafka search tool (dev-build)
-    
+## Features
+
+- **Grep**: Search a Kafka topic and grep messages that matches a provided search query.
+- **Tail**: Tail a Kafka topic and filter messages that matches a provided filter criteria.
+
+## Running Raccoon
+
+### Grep
+The grep command will search through a Kafka topic from the earliest offset and match 
+all messages with a provided search query.
+All matched messages can be printed to the terminal and/or exported to a CSV file.
+
     Usage:
       raccoon grep [flags]
     
@@ -43,14 +50,35 @@ Coming soon
       -q, --value-query string   Value query (Optional)
       -v, --verbose              Print output in terminal (Optional)
     
-    required flag(s) "broker", "topic" not set
+### Tail
+The tail command will tail a Kafka topic from the latest offset and match all newly published 
+messages on the subscribed topic with a provided filter query.
+All matched messages can be printed to the terminal and/or exported to a CSV file.
 
-A summary will always be printed in the terminal when the grep command has been executed. The summary will show the matched message count, and the search time. The full result can either be presented in the terminal by using the --verbose flag or be exported to a CSV file by using the --output flag. The result will include each the partitioned id, offset, timestamp, key and value.
+    Usage:
+      raccoon tail [flags]
+    
+    Flags:
+      -b, --broker string        Broker address (Required)
+      -g, --group string         Group name (Optional)
+      -h, --help                 help for tail
+      -k, --key-query string     Key query (Optional)
+      -l, --limit int            Limit message consumption per partition. -1 is no limit (Optional) (default -1)
+      -o, --output string        Output file name (Optional)
+      -t, --topic string         Topic name (Required)
+      -q, --value-query string   Value query (Optional)
 
 ## Example
 
     raccoon grep -b localhost:9092 -q MyQuery -t MyTopic -o result.csv
     
+    ____
+    |  _ \ __ _  ___ ___ ___   ___  _ __
+    | |_) / _` |/ __/ __/ _ \ / _ \| '_ \
+    |  _ < (_| | (_| (_| (_) | (_) | | | |
+    |_| \_\__,_|\___\___\___/ \___/|_| |_|
+    Raccoon: Kafka search tool (v1.0.0)
+
     Connecting to Kafka                      ... done! [2 in 105ms]
     Reading messages (280 matches)           ... done! [1.00M in 3.003s]
     Disconnecting from Kafka                 ... done! [1 in 100ms]
