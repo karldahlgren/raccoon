@@ -26,7 +26,7 @@ package kafka
 
 import "time"
 
-// Extracted data from matched Kafka messages
+// Message contains information and data from a Kafka message/event
 type Message struct {
 	Key       string
 	Value     string

@@ -36,17 +36,17 @@ import (
 	"time"
 )
 
-// Create a new earliest Kafka consumer
+// CreateEarliestConsumer Creates a new Kafka consumer with the earliest offset
 func CreateEarliestConsumer(bootstrap string, topic string, group string, tracker *progress.Tracker) *kafka.Consumer {
 	return createConsumer(bootstrap, topic, group, "earliest", tracker)
 }
 
-// Create a new earliest Kafka consumer
+// CreateLatestConsumer Creates a new Kafka consumer with the latest offset
 func CreateLatestConsumer(bootstrap string, topic string, group string, tracker *progress.Tracker) *kafka.Consumer {
 	return createConsumer(bootstrap, topic, group, "latest", tracker)
 }
 
-// Stop a Kafka consumer
+// StopConsumer will stop and disconnect a consumer from Kafka
 func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker) {
 	err := consumer.Close()
 
@@ -57,7 +57,7 @@ func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker) {
 	tracker.MarkAsDone()
 }
 
-// Get all partitions for a particular topic
+// GetPartitions retrieves information regarding all partitions for a provided topic
 func GetPartitions(consumer *kafka.Consumer, topic string, tracker *progress.Tracker) []Partition {
 	metaData, err := consumer.GetMetadata(&topic, false, -1)
 

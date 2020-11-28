@@ -29,7 +29,7 @@ import (
 	"time"
 )
 
-// The result from the Kafka search action
+// Result from a Kafka operation, such as grep or tail
 type Result struct {
 	MatchedMessages    int64
 	ReadMessages    int64

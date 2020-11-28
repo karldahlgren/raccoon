@@ -41,7 +41,7 @@ var client = &http.Client{
 	},
 }
 
-// Check for new updates
+// CheckForUpdates will connect to GitHub and retrieve the latest version of the application
 func CheckForUpdates() {
 	currentVersion := Version
 	rand.Seed(time.Now().UnixNano())

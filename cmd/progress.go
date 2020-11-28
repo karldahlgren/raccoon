@@ -30,7 +30,7 @@ import (
 	"time"
 )
 
-// Create new progress
+// CreateProgress creates a new progress, which is used to create progress bars and trackers
 func CreateProgress() progress.Writer {
 	pw := progress.NewWriter()
 	pw.SetTrackerLength(25)
@@ -51,7 +51,7 @@ func CreateProgress() progress.Writer {
 	return pw
 }
 
-// Create new tracker for a progress
+// CreateTracker Create new tracker for a progress
 func CreateTracker(message string, total int64, writer progress.Writer) *progress.Tracker {
 	tracker := progress.Tracker{Message: message, Total: total, Units: progress.UnitsDefault}
 	writer.AppendTracker(&tracker)
@@ -59,13 +59,13 @@ func CreateTracker(message string, total int64, writer progress.Writer) *progres
 	return &tracker
 }
 
-// Initiate progress
+// InitiateProgress will render the progress bars and sleep 100 ms for rendering reasons
 func InitiateProgress(writer progress.Writer) {
 	go writer.Render()
 	time.Sleep(100 * time.Millisecond)
 }
 
-// Finish progress
+// FinishProgress finish the progress bars
 func FinishProgress(writer progress.Writer) {
 	time.Sleep(time.Second)
 	if writer.LengthActive() == 0 {

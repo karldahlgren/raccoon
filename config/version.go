@@ -24,5 +24,5 @@
 
 package config
 
-// The current version of the program
+// Version represents the current version of the application
 const Version = "(dev-build)"

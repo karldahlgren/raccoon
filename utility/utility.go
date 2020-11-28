@@ -29,7 +29,7 @@ import (
 	"os"
 )
 
-// Exit the program upon an error
+// ExitOnError prints an error and exits the application
 func ExitOnError(err error) {
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +37,7 @@ func ExitOnError(err error) {
 	}
 }
 
-// Calculate the sum of all values in a Map
+// Sum calculates the sum of all values in a map
 func Sum(values map[int32]int64) int64  {
 	total := int64(0)
 	for _, value := range values {
