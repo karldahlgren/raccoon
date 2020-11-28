@@ -68,7 +68,7 @@ func CheckForUpdates() {
 		newVersion := s[len(s)-1]
 
 		if currentVersion != newVersion {
-			fmt.Printf("New version avaiable %s, check %s\n\n", newVersion, updateURL)
+			fmt.Printf("New version available %s, check %s\n\n", newVersion, updateURL)
 		}
 	}
 }
