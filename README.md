@@ -2,6 +2,8 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/karldahlgren/raccoon)](https://goreportcard.com/report/github.com/karldahlgren/raccoon)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/karldahlgren/raccoon/blob/master/LICENSE)
+[![Go version](https://img.shields.io/github/go-mod/go-version/karldahlgren/raccoon)](https://github.com/karldahlgren/raccoon/blob/master/go.mod)
+[![Godoc](https://godoc.org/github.com/karldahlgren/raccoon?status.svg)](https://godoc.org/github.com/karldahlgren/raccoon)
 
 Raccoon is a command line search tool for Apache Kafka written in Go. 
 The tool enables users to search and grep particular messages in a Kafka topic by providing a search query. 
