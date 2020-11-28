@@ -22,27 +22,11 @@
  * THE SOFTWARE.
  */
 
-package utility
+package kafka
 
-import (
-	"fmt"
-	"os"
-)
-
-// Exit the program upon an error
-func ExitOnError(err error) {
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
-
-// Calculate the sum of all values in a Map
-func Sum(values map[int32]int64) int64  {
-	total := int64(0)
-	for _, value := range values {
-		total += value
-	}
-
-	return total
+// Partition information about a topic partition
+type Partition struct {
+	id int32
+	highOffset int64
+	lowOffset int64
 }

@@ -32,10 +32,11 @@ import (
 
 var tailCmd = &cobra.Command{
 	Use:   "tail",
-	Short: "Tail Kafka topics that and get matches",
-	Long:  `Tail a Kafka topic and retrieve all matches`,
+	Short: "Tail a Kafka topic and match all new messages",
+	Long:  `The tail command will subscribe to a topic with the latest offset and listen for all new message
+			published on the topic. All matched messages can be displayed in the terminal and/or exported to a CSV file.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		broker := getStringFlag(cmd,"broker")
+		bootstrap := getStringFlag(cmd,"bootstrap-server")
 		group := getStringFlag(cmd,"group")
 		topic := getStringFlag(cmd,"topic")
 		keyQuery := getStringFlag(cmd,"key-query")
@@ -44,7 +45,8 @@ var tailCmd = &cobra.Command{
 		limit := getInt64Flag(cmd, "limit")
 		verbose := getBoolFlag(cmd, "verbose")
 
-		fmt.Println("Press enter to stop reading messages\n")
+		fmt.Println("Press enter to stop reading messages")
+		fmt.Println()
 		
 		// Create progress and trackers
 		writer := CreateProgress()
@@ -53,15 +55,18 @@ var tailCmd = &cobra.Command{
 
 		// Create Kafka consumer
 		createConsumerTracker := CreateTracker("Connecting to Kafka", 2, writer)
-		consumer := kafka.CreateLatestConsumer(broker, topic, group, createConsumerTracker)
+		consumer := kafka.CreateLatestConsumer(bootstrap, topic, group, createConsumerTracker)
 
+		// Consumer from Kafka topic
 		consumeTracker := CreateTracker("Reading messages (0 matches)", limit, writer)
 		result := kafka.Tail(consumer, keyQuery, valueQuery, limit, consumeTracker)
 
+		// Stop Kafka consumer
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka", 1, writer)
 		kafka.StopConsumer(consumer, stopConsumerTracker)
 
 		if output != "" {
+			// File output has been provided. Writing to file
 			writeToFileTracker := CreateTracker("Writing to file", limit, writer)
 			writeResultToFile(result, output, writeToFileTracker)
 		}
@@ -69,6 +74,7 @@ var tailCmd = &cobra.Command{
 		printSummaryToPrompt(result)
 
 		if verbose {
+			// Print all the matched messages in the terminal
 			printResultToPrompt(result)
 		}
 
@@ -77,7 +83,7 @@ var tailCmd = &cobra.Command{
 }
 
 func init() {
-	tailCmd.Flags().StringP("broker", "b", "", "Broker address (Required)")
+	tailCmd.Flags().StringP("bootstrap-server", "b", "", "Bootstrap server address (Required)")
 	tailCmd.Flags().StringP("topic", "t", "", "Topic name (Required)")
 	tailCmd.Flags().StringP("group", "g", "", "Group name (Optional)")
 	tailCmd.Flags().StringP( "value-query", "q", "", "Value query (Optional)")
@@ -86,7 +92,7 @@ func init() {
 	tailCmd.Flags().Int64P("limit", "l", -1, "Limit message consumption per partition. -1 is no limit (Optional)")
 	tailCmd.Flags().BoolP("verbose", "v", false, "Print output in terminal (Optional)")
 
-	tailCmd.MarkFlagRequired("broker")
-	tailCmd.MarkFlagRequired("topic")
+	_ = tailCmd.MarkFlagRequired("bootstrap-server")
+	_ = tailCmd.MarkFlagRequired("topic")
 	rootCmd.AddCommand(tailCmd)
 }

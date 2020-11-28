@@ -31,10 +31,12 @@ import (
 
 var grepCmd = &cobra.Command{
 	Use:   "grep",
-	Short: "Search through a Kafka topics that and grep matches",
-	Long:  `Search through a Kafka topics that and grep matches`,
+	Short: "Search through a Kafka topics and grep all matching messages",
+	Long:  `The tail command will subscribe to a topic with the earliest offset and read the 
+			specified amount of messages, or to the end of the topic, from each partition. 
+			All matched messages can be displayed in the terminal and/or exported to a CSV file.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		broker := getStringFlag(cmd,"broker")
+		bootstrap := getStringFlag(cmd,"bootstrap-server")
 		group := getStringFlag(cmd,"group")
 		topic := getStringFlag(cmd,"topic")
 		keyQuery := getStringFlag(cmd,"key-query")
@@ -49,15 +51,22 @@ var grepCmd = &cobra.Command{
 
 		// Create Kafka consumer
 		createConsumerTracker := CreateTracker("Connecting to Kafka", 2, writer)
-		consumer := kafka.CreateEarliestConsumer(broker, topic, group, createConsumerTracker)
+		consumer := kafka.CreateEarliestConsumer(bootstrap, topic, group, createConsumerTracker)
 
+		// Retrieve Partition metadata
+		getPartitionsTracker := CreateTracker("Reading topic partition metadata", 100, writer)
+		partitions := kafka.GetPartitions(consumer, topic, getPartitionsTracker)
+
+		// Consumer from Kafka topic
 		consumeTracker := CreateTracker("Reading messages (0 matches)", limit, writer)
-		result := kafka.Consume(consumer, keyQuery, valueQuery, limit, consumeTracker)
+		result := kafka.Consume(consumer, &partitions, keyQuery, valueQuery, limit, consumeTracker)
 
+		// Stop Kafka consumer
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka", 1, writer)
 		kafka.StopConsumer(consumer, stopConsumerTracker)
 
 		if output != "" {
+			// File output has been provided. Writing to file
 			writeToFileTracker := CreateTracker("Writing to file", limit, writer)
 			writeResultToFile(result, output, writeToFileTracker)
 		}
@@ -65,6 +74,7 @@ var grepCmd = &cobra.Command{
 		printSummaryToPrompt(result)
 
 		if verbose {
+			// Print all the matched messages in the terminal
 			printResultToPrompt(result)
 		}
 
@@ -73,7 +83,7 @@ var grepCmd = &cobra.Command{
 }
 
 func init() {
-	grepCmd.Flags().StringP("broker", "b", "", "Broker address (Required)")
+	grepCmd.Flags().StringP("bootstrap-server", "b", "", "Bootstrap server address (Required)")
 	grepCmd.Flags().StringP("topic", "t", "", "Topic name (Required)")
 	grepCmd.Flags().StringP("group", "g", "", "Group name (Optional)")
 	grepCmd.Flags().StringP( "value-query", "q", "", "Value query (Optional)")
@@ -82,7 +92,7 @@ func init() {
 	grepCmd.Flags().Int64P("limit", "l", 1000, "Limit message consumption per partition (Optional)")
 	grepCmd.Flags().BoolP("verbose", "v", false, "Print output in terminal (Optional)")
 
-	grepCmd.MarkFlagRequired("broker")
-	grepCmd.MarkFlagRequired("topic")
+	_ = grepCmd.MarkFlagRequired("bootstrap-server")
+	_ = grepCmd.MarkFlagRequired("topic")
 	rootCmd.AddCommand(grepCmd)
 }

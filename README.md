@@ -32,23 +32,23 @@ Coming soon
 ## Running Raccoon
 
 ### Grep
-The grep command will search through a Kafka topic from the earliest offset and match 
-all messages with a provided search query.
+The grep command will search through a Kafka topic from the earliest offset and read
+messages from the beginning until the limit has been reached, or until the end of the topic has been reached.
 All matched messages can be printed to the terminal and/or exported to a CSV file.
 
     Usage:
       raccoon grep [flags]
     
     Flags:
-      -b, --broker string        Broker address (Required)
-      -g, --group string         Group name (Optional)
-      -h, --help                 help for grep
-      -k, --key-query string     Key query (Optional)
-      -l, --limit int            Limit message consumption per partition (Optional) (default 1000)
-      -o, --output string        Output file name (Optional)
-      -t, --topic string         Topic name (Required)
-      -q, --value-query string   Value query (Optional)
-      -v, --verbose              Print output in terminal (Optional)
+      -b, --bootstrap-server string   Bootstrap server address (Required)
+      -g, --group string              Group name (Optional)
+      -h, --help                      help for grep
+      -k, --key-query string          Key query (Optional)
+      -l, --limit int                 Limit message consumption per partition (Optional) (default 1000)
+      -o, --output string             Output file name (Optional)
+      -t, --topic string              Topic name (Required)
+      -q, --value-query string        Value query (Optional)
+      -v, --verbose                   Print output in terminal (Optional)
     
 ### Tail
 The tail command will tail a Kafka topic from the latest offset and match all newly published 
@@ -59,18 +59,19 @@ All matched messages can be printed to the terminal and/or exported to a CSV fil
       raccoon tail [flags]
     
     Flags:
-      -b, --broker string        Broker address (Required)
-      -g, --group string         Group name (Optional)
-      -h, --help                 help for tail
-      -k, --key-query string     Key query (Optional)
-      -l, --limit int            Limit message consumption per partition. -1 is no limit (Optional) (default -1)
-      -o, --output string        Output file name (Optional)
-      -t, --topic string         Topic name (Required)
-      -q, --value-query string   Value query (Optional)
+      -b, --bootstrap-server string   Bootstrap server address (Required)
+      -g, --group string              Group name (Optional)
+      -h, --help                      help for tail
+      -k, --key-query string          Key query (Optional)
+      -l, --limit int                 Limit message consumption per partition. -1 is no limit (Optional) (default -1)
+      -o, --output string             Output file name (Optional)
+      -t, --topic string              Topic name (Required)
+      -q, --value-query string        Value query (Optional)
+      -v, --verbose                   Print output in terminal (Optional)
 
 ## Example
 
-    raccoon grep -b localhost:9092 -q MyQuery -t MyTopic -o result.csv
+    raccoon grep -b localhost:9092 -q MyQuery -t MyTopic -o result.csv -l 1000000
     
     ____
     |  _ \ __ _  ___ ___ ___   ___  _ __
@@ -79,17 +80,17 @@ All matched messages can be printed to the terminal and/or exported to a CSV fil
     |_| \_\__,_|\___\___\___/ \___/|_| |_|
     Raccoon: Kafka search tool (v1.0.0)
 
-    Connecting to Kafka                      ... done! [2 in 105ms]
-    Reading messages (280 matches)           ... done! [1.00M in 3.003s]
-    Disconnecting from Kafka                 ... done! [1 in 100ms]
-    Writing to file                          ... done! [280 in 104ms]
+    Connecting to Kafka                      ... done! [0 in 109ms]
+    Reading topic partition metadata         ... done! [10 in 110ms]
+    Reading messages (229 matches)           ... done! [999.01K in 3.042s]
+    Disconnecting from Kafka                 ... done! [0 in 111ms]
+    Writing to file                          ... done! [229 in 102ms]
     
     Summary:
-      Read messages.......................:  1000000
-      Matched messages....................:  280
+      Read messages.......................:  999009
+      Matched messages....................:  229
       Search time.........................:  3.000000s
       Messages/s..........................:  0.000003
-
 
 ## License
 
