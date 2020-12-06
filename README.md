@@ -16,7 +16,7 @@ Additionally, the tool also allows the user to tail a Kafka topic and filter mes
 Once finished, all matched Kafka messages could either be presented in the terminal or exported to a CSV file.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/img/screenshot-2.gif" width="90%" alt="preview"/>
+  <img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/img/screenshot-2.gif" width="100%" alt="preview"/>
 </p>
 
 Table Of Content
