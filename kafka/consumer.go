@@ -27,24 +27,24 @@ package kafka
 import (
 	"github.com/jedib0t/go-pretty/v6/progress"
 	"github.com/karldahlgren/raccoon/utility"
-	confluent "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"math/rand"
 	"strconv"
 	"time"
 )
 
 // CreateEarliestConsumer Creates a new Kafka consumer with the earliest offset
-func CreateEarliestConsumer(bootstrap string, topic string, group string, tracker *progress.Tracker) *confluent.Consumer {
+func CreateEarliestConsumer(bootstrap string, topic string, group string, tracker *progress.Tracker) *kafka.Consumer {
 	return createConsumer(bootstrap, topic, group, "earliest", tracker)
 }
 
 // CreateLatestConsumer Creates a new Kafka consumer with the latest offset
-func CreateLatestConsumer(bootstrap string, topic string, group string, tracker *progress.Tracker) *confluent.Consumer {
+func CreateLatestConsumer(bootstrap string, topic string, group string, tracker *progress.Tracker) *kafka.Consumer {
 	return createConsumer(bootstrap, topic, group, "latest", tracker)
 }
 
 // StopConsumer will stop and disconnect a consumer from Kafka
-func StopConsumer(consumer *confluent.Consumer, tracker *progress.Tracker) {
+func StopConsumer(consumer *kafka.Consumer, tracker *progress.Tracker) {
 	err := consumer.Close()
 
 	if err != nil {
@@ -55,7 +55,7 @@ func StopConsumer(consumer *confluent.Consumer, tracker *progress.Tracker) {
 }
 
 // GetPartitions retrieves information regarding all partitions for a provided topic
-func GetPartitions(consumer *confluent.Consumer, topic string, tracker *progress.Tracker) map[int32]Partition {
+func GetPartitions(consumer *kafka.Consumer, topic string, tracker *progress.Tracker) map[int32]Partition {
 	metaData, err := consumer.GetMetadata(&topic, false, -1)
 
 	if err != nil {
@@ -96,11 +96,11 @@ func GetPartitions(consumer *confluent.Consumer, topic string, tracker *progress
 	return partitions
 }
 
-func createConsumer(bootstrap string, topic string, group string, offset string, tracker *progress.Tracker) (*confluent.Consumer) {
+func createConsumer(bootstrap string, topic string, group string, offset string, tracker *progress.Tracker) (*kafka.Consumer) {
 	if group == "" {
 		group = "raccoon-" + strconv.Itoa(rand.Int())
 	}
-	consumer, consumerError := confluent.NewConsumer(&confluent.ConfigMap{
+	consumer, consumerError := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":  bootstrap,
 		"group.id":           group,
 		"auto.offset.reset":  offset,

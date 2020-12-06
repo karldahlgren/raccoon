@@ -29,13 +29,13 @@ import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/progress"
 	"github.com/karldahlgren/raccoon/utility"
-	confluent "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"strconv"
 	"time"
 )
 
 // Tail messages from a Kafka consumer
-func Tail(consumer *confluent.Consumer, keyQuery string, valueQuery string, limit int64, tracker *progress.Tracker) Result {
+func Tail(consumer *kafka.Consumer, keyQuery string, valueQuery string, limit int64, tracker *progress.Tracker) Result {
 	messages := list.New()
 	var matchedMessages int64 = 0
 	var readMessages int64 = 0

@@ -25,11 +25,11 @@
 package kafka
 
 import (
-	confluent "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"strings"
 )
 
-func parseMessage(message *confluent.Message, keyQuery string, valueQuery string) *Message  {
+func parseMessage(message *kafka.Message, keyQuery string, valueQuery string) *Message  {
 	key := strings.ToLower(string(message.Key))
 	value := strings.ToLower(string(message.Value))
 	if (keyQuery != "" && strings.Contains(key, keyQuery)) ||

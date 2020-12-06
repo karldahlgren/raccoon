@@ -28,13 +28,13 @@ import (
 	"container/list"
 	"github.com/jedib0t/go-pretty/v6/progress"
 	"github.com/karldahlgren/raccoon/utility"
-	confluent "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"strconv"
 	"time"
 )
 
 // Consume messages from a Kafka consumer
-func Consume(consumer *confluent.Consumer, partitions map[int32]Partition, topic string, keyQuery string, valueQuery string,
+func Consume(consumer *kafka.Consumer, partitions map[int32]Partition, topic string, keyQuery string, valueQuery string,
 	limit int64, seekTimestamp string, latest bool, tracker *progress.Tracker) Result {
 	if seekTimestamp != "" {
 		partitions = seekToTimestamp(consumer, partitions, topic, seekTimestamp)
