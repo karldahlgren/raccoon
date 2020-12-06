@@ -33,7 +33,7 @@ import (
 )
 
 const versionURL = "https://github.com/karldahlgren/raccoon/releases/latest"
-const updateURL = "https://github.com/karldahlgren/raccoon#install"
+const updateURL = "https://github.com/karldahlgren/raccoon#installation"
 
 var client = &http.Client{
 	CheckRedirect: func(req *http.Request, via []*http.Request) error {
