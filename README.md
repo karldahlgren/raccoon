@@ -1,19 +1,23 @@
 <p align="center">
-  <img src="logo.png" width="552" height="162" alt="raccoon-logo"/>
+  <img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/logo.png" width="552" height="162" alt="raccoon-logo"/>
 </p>
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/karldahlgren/raccoon)](https://goreportcard.com/report/github.com/karldahlgren/raccoon)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/karldahlgren/raccoon/blob/master/LICENSE)
-[![Go version](https://img.shields.io/github/go-mod/go-version/karldahlgren/raccoon)](https://github.com/karldahlgren/raccoon/blob/master/go.mod)
-[![Current release](https://img.shields.io/github/v/release/karldahlgren/raccoon.svg)](https://github.com/karldahlgren/raccoon/releases)
-[![Godoc](https://godoc.org/github.com/karldahlgren/raccoon?status.svg)](https://godoc.org/github.com/karldahlgren/raccoon)
+<p align="center">
+  <a href="https://goreportcard.com/report/github.com/karldahlgren/raccoon"><img src="https://goreportcard.com/badge/github.com/karldahlgren/raccoon" alt="go-report-card"></a>
+  <a href="https://github.com/karldahlgren/raccoon/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="mit-license"></a>
+  <a href="https://github.com/karldahlgren/raccoon/blob/master/go.mod"><img src="https://img.shields.io/github/go-mod/go-version/karldahlgren/raccoon" alt="go-version"></a>
+  <a href="https://github.com/karldahlgren/raccoon/releases"><img src="https://img.shields.io/github/v/release/karldahlgren/raccoon.svg" alt="release"></a>
+  <a href="https://godoc.org/github.com/karldahlgren/raccoon"><img src="https://godoc.org/github.com/karldahlgren/raccoon?status.svg" alt="go-doc"></a>
+</p>
 
 Raccoon is a command line search tool for Apache Kafka written in Go. 
 The tool enables users to search and grep particular messages in a Kafka topic by providing a search query. 
 Additionally, the tool also allows the user to tail a Kafka topic and filter messages based on a provided search query.
 Once finished, all matched Kafka messages could either be presented in the terminal or exported to a CSV file.
 
-<img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/img/screenshot.gif" width="90%"/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/img/screenshot.gif" width="90%" alt="preview"/>
+</p>
 
 Table Of Content
 ----
