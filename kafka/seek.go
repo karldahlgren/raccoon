@@ -93,13 +93,8 @@ func seekToLatest(consumer *kafka.Consumer, partitions map[int32]Partition, topi
 func seek(consumer *kafka.Consumer, topicPartitions []kafka.TopicPartition,
 	partitions map[int32]Partition) map[int32]Partition  {
 
-	err := consumer.Assign(topicPartitions)
-	if err != nil {
-		utility.ExitOnError(err)
-	}
-
-	_,err = consumer.CommitOffsets(topicPartitions)
-	if err != nil {
+	_,err := consumer.StoreOffsets(topicPartitions)
+	if err != nil && err.(kafka.Error).IsFatal() == true {
 		utility.ExitOnError(err)
 	}
 
