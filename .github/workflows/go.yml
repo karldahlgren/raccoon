@@ -134,7 +134,7 @@ jobs:
           asset_name: raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz.sha256sum
           asset_content_type: text/plain
 
-        # darwin
+        # windows
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -38,7 +38,7 @@ var rootCmd = &cobra.Command{
 
 // Execute method prints the logo and starts all commands
 func Execute() {
-	fmt.Println("____")
+	fmt.Println(" ____")
 	fmt.Println("|  _ \\ __ _  ___ ___ ___   ___  _ __")
 	fmt.Println("| |_) / _` |/ __/ __/ _ \\ / _ \\| '_ \\")
 	fmt.Println("|  _ < (_| | (_| (_| (_) | (_) | | | |")

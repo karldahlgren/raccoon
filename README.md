@@ -79,7 +79,7 @@ All matched messages can be printed to the terminal and/or exported to a CSV fil
 
     raccoon grep -b localhost:9092 -q MyQuery -t MyTopic -o result.csv -l 1000000
     
-    ____
+     ____
     |  _ \ __ _  ___ ___ ___   ___  _ __
     | |_) / _` |/ __/ __/ _ \ / _ \| '_ \
     |  _ < (_| | (_| (_| (_) | (_) | | | |
