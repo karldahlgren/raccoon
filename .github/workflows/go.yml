@@ -52,16 +52,9 @@ jobs:
           GOOS=linux GOARCH=amd64 go build -ldflags "-s" -o bin/raccoon && \
                     cd bin && tar czf raccoon-${{ steps.get_version.outputs.VERSION }}-linux.tar.gz raccoon \
                     && rm -rf raccoon && cd -
-          GOOS=darwin GOARCH=amd64 go build -ldflags "-s" -o bin/raccoon && \
-                    cd bin && tar czf raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz raccoon \
-                    && rm -rf raccoon && cd -
-          GOOS=windows GOARCH=amd64 go build -ldflags "-s" -o bin/raccoon.exe && \
-                            cd bin && zip raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip raccoon.exe \
-                            && rm -rf raccoon.exe && cd -
+
           cd bin
           sha256sum raccoon-${{ steps.get_version.outputs.VERSION }}-linux.tar.gz > raccoon-${{ steps.get_version.outputs.VERSION }}-linux.tar.gz.sha256sum
-          sha256sum raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz > raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz.sha256sum
-          sha256sum raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip > raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip.sha256sum
           cd -
       - uses: actions/upload-artifact@master
         if: startsWith(github.ref, 'refs/tags/')
@@ -113,42 +106,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./raccoon-${{ steps.get_version.outputs.VERSION }}-linux.tar.gz.sha256sum
           asset_name: raccoon-${{ steps.get_version.outputs.VERSION }}-linux.tar.gz.sha256sum
-          asset_content_type: text/plain
-
-        # darwin
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz
-          asset_name: raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz
-          asset_content_type: application/tar+gzip
-
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz.sha256sum
-          asset_name: raccoon-${{ steps.get_version.outputs.VERSION }}-darwin.tar.gz.sha256sum
-          asset_content_type: text/plain
-
-        # windows
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip
-          asset_name: raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip
-          asset_content_type: application/tar+gzip
-
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip.sha256sum
-          asset_name: raccoon-${{ steps.get_version.outputs.VERSION }}-windows.zip.sha256sum
           asset_content_type: text/plain
