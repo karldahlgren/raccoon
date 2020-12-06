@@ -33,12 +33,12 @@ import (
 // CreateProgress creates a new progress, which is used to create progress bars and trackers
 func CreateProgress() progress.Writer {
 	pw := progress.NewWriter()
-	pw.SetTrackerLength(25)
+	pw.SetTrackerLength(30)
 	pw.ShowOverallTracker(false)
 	pw.ShowTime(true)
 	pw.ShowTracker(true)
 	pw.ShowValue(true)
-	pw.SetMessageWidth(40)
+	pw.SetMessageWidth(55)
 	pw.SetSortBy(progress.SortByPercentDsc)
 	pw.SetStyle(progress.StyleCircle)
 	pw.Style().Colors.Tracker = text.Colors{text.FgYellow}

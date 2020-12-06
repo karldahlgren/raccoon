@@ -25,6 +25,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/karldahlgren/raccoon/kafka"
 	"github.com/spf13/cobra"
 )
@@ -42,9 +43,26 @@ var grepCmd = &cobra.Command{
 		keyQuery := getStringFlag(cmd,"key-query")
 		valueQuery := getStringFlag(cmd,"value-query")
 		output := getStringFlag(cmd,"output")
+		seekTimestamp := getStringFlag(cmd,"seek")
 		limit := getInt64Flag(cmd, "limit")
 		verbose := getBoolFlag(cmd, "verbose")
-		
+		earliest := getBoolFlag(cmd, "earliest")
+		latest := getBoolFlag(cmd, "latest")
+
+		if earliest == true && latest == true {
+			fmt.Printf("Not allowed to combine earliest flag with latest flag")
+			return
+		} else if seekTimestamp != "" && earliest == true {
+			fmt.Printf("Not allowed to combine seek timestamp flag with earliest flag")
+			return
+		} else if seekTimestamp != "" && latest == true {
+			fmt.Printf("Not allowed to combine seek timestamp flag with latest flag")
+			return
+		} else if limit < 0 {
+			fmt.Printf("Limit cannot be less than zero")
+			return
+		}
+
 		// Create progress and trackers
 		writer := CreateProgress()
 		InitiateProgress(writer)
@@ -59,7 +77,7 @@ var grepCmd = &cobra.Command{
 
 		// Consumer from Kafka topic
 		consumeTracker := CreateTracker("Reading messages (0 matches)", limit, writer)
-		result := kafka.Consume(consumer, &partitions, keyQuery, valueQuery, limit, consumeTracker)
+		result := kafka.Consume(consumer, partitions, topic, keyQuery, valueQuery, limit, seekTimestamp, latest, consumeTracker)
 
 		// Stop Kafka consumer
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka", 1, writer)
@@ -89,8 +107,12 @@ func init() {
 	grepCmd.Flags().StringP( "value-query", "q", "", "Value query (Optional)")
 	grepCmd.Flags().StringP( "key-query", "k", "", "Key query (Optional)")
 	grepCmd.Flags().StringP("output", "o", "", "Output file name (Optional)")
+	grepCmd.Flags().String("seek", "", "Seek and set offset to a timestamp. RFC3339 time format (Optional)")
 	grepCmd.Flags().Int64P("limit", "l", 1000, "Limit message consumption per partition (Optional)")
 	grepCmd.Flags().BoolP("verbose", "v", false, "Print output in terminal (Optional)")
+	grepCmd.Flags().Bool("earliest", false, "Start at the earliest offset (Optional)")
+	grepCmd.Flags().Bool("latest", false, "Start at the latest offset minus the limit (Optional)")
+
 
 	_ = grepCmd.MarkFlagRequired("bootstrap-server")
 	_ = grepCmd.MarkFlagRequired("topic")

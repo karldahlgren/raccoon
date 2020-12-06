@@ -34,8 +34,8 @@ Coming soon
 ## Running Raccoon
 
 ### Grep
-The grep command will search through a Kafka topic from the earliest offset and read
-messages from the beginning until the limit has been reached, or until the end of the topic has been reached.
+The grep command will search through a Kafka topic from either the earliest offset (Default), latest offset or from a particular time.
+The command will read messages until the limit has been reached, or until the end of the topic has been reached.
 All matched messages can be printed to the terminal and/or exported to a CSV file.
 
     Usage:
@@ -43,14 +43,18 @@ All matched messages can be printed to the terminal and/or exported to a CSV fil
     
     Flags:
       -b, --bootstrap-server string   Bootstrap server address (Required)
+          --earliest                  Start at the earliest offset (Optional)
       -g, --group string              Group name (Optional)
       -h, --help                      help for grep
       -k, --key-query string          Key query (Optional)
+          --latest                    Start at the latest offset minus the limit (Optional)
       -l, --limit int                 Limit message consumption per partition (Optional) (default 1000)
       -o, --output string             Output file name (Optional)
+          --seek string               Seek and set offset to a timestamp. RFC3339 time format (Optional)
       -t, --topic string              Topic name (Required)
       -q, --value-query string        Value query (Optional)
       -v, --verbose                   Print output in terminal (Optional)
+
     
 ### Tail
 The tail command will tail a Kafka topic from the latest offset and match all newly published 
@@ -82,17 +86,17 @@ All matched messages can be printed to the terminal and/or exported to a CSV fil
     |_| \_\__,_|\___\___\___/ \___/|_| |_|
     Raccoon: Kafka search tool (v1.0.0)
 
-    Connecting to Kafka                      ... done! [0 in 109ms]
-    Reading topic partition metadata         ... done! [10 in 110ms]
-    Reading messages (229 matches)           ... done! [999.01K in 3.042s]
-    Disconnecting from Kafka                 ... done! [0 in 111ms]
-    Writing to file                          ... done! [229 in 102ms]
+    Connecting to Kafka                                     ... done! [0 in 114ms]
+    Reading topic partition metadata (10 partitions)        ... done! [10 in 205ms]
+    Reading messages (239 matches)                          ... done! [998.61K in 2.752s]
+    Disconnecting from Kafka                                ... done! [0 in 111ms]
+    Writing to file                                         ... done! [239 in 104ms]
     
     Summary:
-      Read messages.......................:  999009
-      Matched messages....................:  229
-      Search time.........................:  3.000000s
-      Messages/s..........................:  0.000003
+    Read messages.......................:  998607
+    Matched messages....................:  239
+    Search time.........................:  3.000000s
+    Messages/s..........................:  0.000003
 
 ## License
 
