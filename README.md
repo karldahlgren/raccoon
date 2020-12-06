@@ -1,4 +1,6 @@
-# Raccoon: A CLI Kafka Search tool
+<p align="center">
+  <img src="logo.png" width="552" height="162" alt="raccoon-logo"/>
+</p>
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/karldahlgren/raccoon)](https://goreportcard.com/report/github.com/karldahlgren/raccoon)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/karldahlgren/raccoon/blob/master/LICENSE)
