@@ -31,7 +31,9 @@ Table Of Content
 - [License](#license)
 
 ## Installation
-Coming soon
+The releases for Raccoon can be downloaded from the [GitHub Releases page](https://github.com/karldahlgren/raccoon/releases). At the moment, we only provide and distribute the Linux version due to cross-compilation limitation for Kafka Go with GitHub actions. If you are interested in using Raccoon for either Mac OS or Windows, you can simply clone the repository and build it:
+
+    go build
 
 ## Features
 
