@@ -26,38 +26,38 @@ package kafka
 
 import (
 	"github.com/karldahlgren/raccoon/utility"
-	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	confluent "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"strconv"
 	"time"
 )
 
-func seekToTimestamp(consumer *kafka.Consumer, partitions map[int32]Partition, topic string, seekTimestamp string) map[int32]Partition  {
+func seekToTimestamp(consumer *confluent.Consumer, partitions map[int32]Partition, topic string, seekTimestamp string) map[int32]Partition  {
 	timestamp, err := time.Parse(time.RFC3339, seekTimestamp)
 
 	if err != nil {
 		utility.ExitOnError(err)
 	}
 
-	var topicPartitions []kafka.TopicPartition
+	var topicPartitions []confluent.TopicPartition
 	for _, partition := range partitions {
-		topicPartition := kafka.TopicPartition{
+		topicPartition := confluent.TopicPartition{
 			Topic: &topic,
 			Partition: partition.id,
-			Offset: kafka.Offset(timestamp.Round(time.Millisecond).Unix() * 1000),
+			Offset: confluent.Offset(timestamp.Round(time.Millisecond).Unix() * 1000),
 		}
 
 		topicPartitions = append(topicPartitions, topicPartition)
 	}
 
 	offsetTopicPartitions, err := consumer.OffsetsForTimes(topicPartitions, -1)
-	var newOffsetPartitions []kafka.TopicPartition
+	var newOffsetPartitions []confluent.TopicPartition
 	for _, partition := range offsetTopicPartitions {
 		newOffset := partition.Offset
 		if partition.Offset == -1 {
-			newOffset = kafka.Offset(partitions[partition.Partition].highOffset)
+			newOffset = confluent.Offset(partitions[partition.Partition].highOffset)
 			partition.Offset = newOffset
 		}
-		newOffsetPartition := kafka.TopicPartition{
+		newOffsetPartition := confluent.TopicPartition{
 			Topic: &topic,
 			Partition: partition.Partition,
 			Offset: newOffset,
@@ -69,8 +69,8 @@ func seekToTimestamp(consumer *kafka.Consumer, partitions map[int32]Partition, t
 	return seek(consumer, newOffsetPartitions, partitions)
 }
 
-func seekToLatest(consumer *kafka.Consumer, partitions map[int32]Partition, topic string, limit int64) map[int32]Partition {
-	var newOffsetPartitions []kafka.TopicPartition
+func seekToLatest(consumer *confluent.Consumer, partitions map[int32]Partition, topic string, limit int64) map[int32]Partition {
+	var newOffsetPartitions []confluent.TopicPartition
 	for _, partition := range partitions {
 		offset := partition.highOffset - limit
 
@@ -78,10 +78,10 @@ func seekToLatest(consumer *kafka.Consumer, partitions map[int32]Partition, topi
 			offset = partition.lowOffset
 		}
 
-		topicPartition := kafka.TopicPartition{
+		topicPartition := confluent.TopicPartition{
 			Topic: &topic,
 			Partition: partition.id,
-			Offset: kafka.Offset(offset),
+			Offset: confluent.Offset(offset),
 		}
 
 		newOffsetPartitions = append(newOffsetPartitions, topicPartition)
@@ -90,7 +90,7 @@ func seekToLatest(consumer *kafka.Consumer, partitions map[int32]Partition, topi
 	return seek(consumer, newOffsetPartitions, partitions)
 }
 
-func seek(consumer *kafka.Consumer, topicPartitions []kafka.TopicPartition,
+func seek(consumer *confluent.Consumer, topicPartitions []confluent.TopicPartition,
 	partitions map[int32]Partition) map[int32]Partition  {
 
 	err := consumer.Assign(topicPartitions)
