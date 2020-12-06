@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package kafka
+package anothername
 
 // Partition information about a topic partition
 type Partition struct {

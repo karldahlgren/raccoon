@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package kafka
+package anothername
 
 import (
 	"github.com/karldahlgren/raccoon/utility"

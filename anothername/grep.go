@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package kafka
+package anothername
 
 import (
 	"container/list"

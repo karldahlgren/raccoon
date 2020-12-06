@@ -26,7 +26,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/karldahlgren/raccoon/kafka"
+	"github.com/karldahlgren/raccoon/anothername"
 	"github.com/spf13/cobra"
 )
 
@@ -69,19 +69,19 @@ var grepCmd = &cobra.Command{
 
 		// Create Kafka consumer
 		createConsumerTracker := CreateTracker("Connecting to Kafka", 2, writer)
-		consumer := kafka.CreateEarliestConsumer(bootstrap, topic, group, createConsumerTracker)
+		consumer := anothername.CreateEarliestConsumer(bootstrap, topic, group, createConsumerTracker)
 
 		// Retrieve Partition metadata
 		getPartitionsTracker := CreateTracker("Reading topic partition metadata", 100, writer)
-		partitions := kafka.GetPartitions(consumer, topic, getPartitionsTracker)
+		partitions := anothername.GetPartitions(consumer, topic, getPartitionsTracker)
 
 		// Consumer from Kafka topic
 		consumeTracker := CreateTracker("Reading messages (0 matches)", limit, writer)
-		result := kafka.Consume(consumer, partitions, topic, keyQuery, valueQuery, limit, seekTimestamp, latest, consumeTracker)
+		result := anothername.Consume(consumer, partitions, topic, keyQuery, valueQuery, limit, seekTimestamp, latest, consumeTracker)
 
 		// Stop Kafka consumer
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka", 1, writer)
-		kafka.StopConsumer(consumer, stopConsumerTracker)
+		anothername.StopConsumer(consumer, stopConsumerTracker)
 
 		if output != "" {
 			// File output has been provided. Writing to file

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package kafka
+package anothername
 
 import (
 	confluent "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"

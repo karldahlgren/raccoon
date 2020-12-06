@@ -22,15 +22,17 @@
  * THE SOFTWARE.
  */
 
-package kafka
+package anothername
 
-import "time"
+import (
+	"container/list"
+	"time"
+)
 
-// Message contains information and data from a Kafka message/event
-type Message struct {
-	Key       string
-	Value     string
-	Timestamp time.Time
-	Partition int32
-	Offset    string
+// Result from a Kafka operation, such as grep or tail
+type Result struct {
+	MatchedMessages    int64
+	ReadMessages    int64
+	Duration time.Duration
+	Messages list.List
 }

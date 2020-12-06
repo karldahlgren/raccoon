@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package kafka
+package anothername
 
 import (
 	"github.com/jedib0t/go-pretty/v6/progress"

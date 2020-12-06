@@ -26,7 +26,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/karldahlgren/raccoon/kafka"
+	"github.com/karldahlgren/raccoon/anothername"
 	"github.com/spf13/cobra"
 )
 
@@ -55,15 +55,15 @@ var tailCmd = &cobra.Command{
 
 		// Create Kafka consumer
 		createConsumerTracker := CreateTracker("Connecting to Kafka", 2, writer)
-		consumer := kafka.CreateLatestConsumer(bootstrap, topic, group, createConsumerTracker)
+		consumer := anothername.CreateLatestConsumer(bootstrap, topic, group, createConsumerTracker)
 
 		// Consumer from Kafka topic
 		consumeTracker := CreateTracker("Reading messages (0 matches)", limit, writer)
-		result := kafka.Tail(consumer, keyQuery, valueQuery, limit, consumeTracker)
+		result := anothername.Tail(consumer, keyQuery, valueQuery, limit, consumeTracker)
 
 		// Stop Kafka consumer
 		stopConsumerTracker := CreateTracker("Disconnecting from Kafka", 1, writer)
-		kafka.StopConsumer(consumer, stopConsumerTracker)
+		anothername.StopConsumer(consumer, stopConsumerTracker)
 
 		if output != "" {
 			// File output has been provided. Writing to file
