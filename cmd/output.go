@@ -28,7 +28,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"github.com/jedib0t/go-pretty/v6/progress"
-	"github.com/karldahlgren/raccoon/anothername"
+	"github.com/karldahlgren/raccoon/kafka"
 	"github.com/karldahlgren/raccoon/utility"
 	"github.com/olekukonko/tablewriter"
 	"os"
@@ -36,7 +36,7 @@ import (
 	"time"
 )
 
-func writeResultToFile(result anothername.Result, output string, tracker *progress.Tracker) {
+func writeResultToFile(result kafka.Result, output string, tracker *progress.Tracker) {
 	if result.Messages.Len() == 0 {
 		tracker.MarkAsDone()
 		return
@@ -55,7 +55,7 @@ func writeResultToFile(result anothername.Result, output string, tracker *progre
 
 	writeHeader(*writer)
 	for element := result.Messages.Front(); element != nil; element = element.Next() {
-		message := element.Value.(*anothername.Message)
+		message := element.Value.(*kafka.Message)
 		row := getData(message)
 		writeRow(*writer, row)
 		tracker.Increment(1)
@@ -78,7 +78,7 @@ func writeRow(writer csv.Writer, row []string) {
 	}
 }
 
-func printSummaryToPrompt(result anothername.Result) {
+func printSummaryToPrompt(result kafka.Result) {
 	searchTime := result.Duration.Round(time.Second).Seconds()
 	averagePerMessage := searchTime / float64(result.ReadMessages)
 	time.Sleep(100 * time.Millisecond)
@@ -91,7 +91,7 @@ func printSummaryToPrompt(result anothername.Result) {
 	fmt.Println()
 }
 
-func printResultToPrompt(result anothername.Result) {
+func printResultToPrompt(result kafka.Result) {
 	if result.Messages.Len() == 0 {
 		return
 	}
@@ -100,14 +100,14 @@ func printResultToPrompt(result anothername.Result) {
 	table.SetHeader([]string{"Partition", "Offset", "Timestamp", "Key", "Value"})
 
 	for element := result.Messages.Front(); element != nil; element = element.Next() {
-		message := element.Value.(*anothername.Message)
+		message := element.Value.(*kafka.Message)
 		row := getData(message)
 		table.Append(row)
 	}
 	table.Render()
 }
 
-func getData(message *anothername.Message) []string {
+func getData(message *kafka.Message) []string {
 	return []string{
 		strconv.FormatInt(int64(message.Partition), 10),
 		message.Offset,
