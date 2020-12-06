@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/logo.png" width="552" height="162" alt="raccoon-logo"/>
+  <a href="https://github.com/karldahlgren/raccoon"><<img src="https://raw.githubusercontent.com/karldahlgren/raccoon/main/logo.png" width="552" height="162" alt="raccoon-logo"/></a>
 </p>
 
 <p align="center">
